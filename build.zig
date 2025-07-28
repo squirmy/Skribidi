@@ -7,6 +7,7 @@ pub fn build(b: *std.Build) !void {
     const upstream = b.dependency("Skribidi", .{});
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+    const libc_file = b.option([]const u8, "libc-file", "Path to libc file") orelse "";
 
     const src_dir = upstream.path("src");
     const include_dir = upstream.path("include");
@@ -33,6 +34,7 @@ pub fn build(b: *std.Build) !void {
     }
     for (header_files) |header|
         lib.installHeader(include_dir.path(b, header), header);
+
     b.installArtifact(lib);
 
     // copy the test data directory to a temp folder when running tests or the example
@@ -90,6 +92,9 @@ pub fn build(b: *std.Build) !void {
         run_example.setCwd(test_data_wf.getDirectory());
         run_example_step.dependOn(&run_example.step);
     }
+
+    if (libc_file.len > 0)
+        recursivelyUpdateLibcForTarget(b, target, .{ .cwd_relative = libc_file });
 }
 
 const skribidi_dependencies: []const []const u8 = &.{
@@ -151,3 +156,31 @@ const example_files: []const []const u8 = &.{
     "main.c",
     "utils.c",
 };
+
+// NOTE: stolen from https://github.com/ziglang/zig/issues/22308
+pub fn recursivelyUpdateLibcForTarget(
+    b: *std.Build,
+    target: std.Build.ResolvedTarget,
+    libc_path: std.Build.LazyPath,
+) void {
+    // HACK: fish out every dependency's Compile steps and set their libc files (& depend on the step).
+    // needed until zig has an answer for libc txt in pkg trees.
+    var id_iter = b.graph.dependency_cache.valueIterator();
+    while (id_iter.next()) |itm| {
+        updateLibcInBuilder(itm.*.builder, target, libc_path);
+    }
+    updateLibcInBuilder(b, target, libc_path);
+}
+fn updateLibcInBuilder(b: *std.Build, target: std.Build.ResolvedTarget, libc_path: std.Build.LazyPath) void {
+    for (b.install_tls.step.dependencies.items) |dep_step| {
+        const inst = dep_step.cast(std.Build.Step.InstallArtifact) orelse continue;
+        const art = inst.artifact;
+        if (art.libc_file != null) return; // already handled
+        if (art.root_module.resolved_target) |other_target| {
+            if (target.result.os.tag == other_target.result.os.tag and target.result.abi == other_target.result.abi) {
+                std.log.info("overriding lib '{s}' libc path to {s}", .{ art.name, libc_path.getDisplayName() });
+                art.setLibCFile(libc_path);
+            }
+        }
+    }
+}
