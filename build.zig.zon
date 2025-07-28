@@ -1,0 +1,40 @@
+.{
+    .name = .skribidi_zig,
+    .version = "0.1.0",
+    .fingerprint = 0x7fcec6aaaccd43f7, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .harfbuzz = .{
+            .url = "git+https://github.com/jjkh/harfbuzz#e66d364ccc8be2a8ed56c0eae48eff16958b9b40",
+            .hash = "harfbuzz-11.0.0-0z10o5gQAACySMD6eEHkICuXWNGdWqXxsJmXaBfANxGi",
+        },
+        .SheenBidi = .{
+            .url = "git+https://github.com/jjkh/SheenBidi#2d409dc1b4a9b18ba4ae7a421181f4baee4724bc",
+            .hash = "SheenBidi-2.9.0-tJuYcxRPAAAZ_Expv_DR2QJGy9_RwbZJ22vb3mDIXa-m",
+        },
+        .libunibreak = .{
+            .url = "git+https://github.com/jjkh/libunibreak#5bc604b16cccdc0e53c4efe705f5383d4f04e0ce",
+            .hash = "libunibreak-6.1.0-aAFUBnoaAAAj0BQ9XxSimwqkYyv-ORDCG31NjGS87ef_",
+        },
+        .budouxc = .{
+            .url = "git+https://github.com/jjkh/budouxc#2dde2eb9b0ef51b5ca3bad30a6c9520c26ca9780",
+            .hash = "budouxc-0.1.0-pOdI8HYRAADMdmiKFdHSLdT0VADRjwQW32IkKeHSndzX",
+        },
+        .Skribidi = .{
+            .url = "git+https://github.com/jjkh/Skribidi-dev?ref=failed-font-test-ubsan#b084807272ca0ba8a6071bde594b1bf974014093",
+            .hash = "N-V-__8AAIpWMgJEcKh21FJeUaL7a0vbpwtGMnyPjvLbpkon",
+        },
+        .glfw = .{
+            .url = "git+https://github.com/jjkh/glfw#40dc85b4bbe3075034a4d395185b289c687ca2ca",
+            .hash = "glfw-3.5.0-hfdU_SwHGgCWAwjtjRHmcPmfi81GUMAfrsQBRB2fGi4D",
+            .lazy = true,
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "LICENSE",
+        "LICENSE-SKRIBIDI",
+        "README.md",
+    },
+}
