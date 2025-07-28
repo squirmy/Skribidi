@@ -1,6 +1,6 @@
 # Skribidi
 
-[`Skribidi`](https://github.com/adah1972/Skribidi) packaged for the [Zig](https://ziglang.org/) build system.
+[`Skribidi`](https://github.com/memononen/Skribidi) packaged for the [Zig](https://ziglang.org/) build system.
 
 ## Status
 
