@@ -71,7 +71,10 @@ pub fn build(b: *std.Build) !void {
             }),
         });
         example_exe.addIncludePath(upstream.path("extern/glad/include"));
-        example_exe.addIncludePath(b.dependency("harfbuzz", .{}).artifact("harfbuzz").getEmittedIncludeTree());
+        example_exe.addIncludePath(b.dependency(
+            "harfbuzz",
+            .{ .target = target },
+        ).artifact("harfbuzz").getEmittedIncludeTree());
         example_exe.addCSourceFiles(.{ .files = example_files, .root = example_dir });
         example_exe.linkLibrary(lib);
         if (b.lazyDependency("glfw", .{ .target = target, .optimize = optimize })) |dep| {
@@ -94,7 +97,7 @@ pub fn build(b: *std.Build) !void {
     }
 
     if (libc_file.len > 0)
-        recursivelyUpdateLibcForTarget(b, target, .{ .cwd_relative = libc_file });
+        recursivelyUpdateLibcForTarget(b, target.result, .{ .cwd_relative = libc_file });
 }
 
 const skribidi_dependencies: []const []const u8 = &.{
@@ -160,7 +163,7 @@ const example_files: []const []const u8 = &.{
 // NOTE: stolen from https://github.com/ziglang/zig/issues/22308
 pub fn recursivelyUpdateLibcForTarget(
     b: *std.Build,
-    target: std.Build.ResolvedTarget,
+    target: std.Target,
     libc_path: std.Build.LazyPath,
 ) void {
     // HACK: fish out every dependency's Compile steps and set their libc files (& depend on the step).
@@ -171,15 +174,24 @@ pub fn recursivelyUpdateLibcForTarget(
     }
     updateLibcInBuilder(b, target, libc_path);
 }
-fn updateLibcInBuilder(b: *std.Build, target: std.Build.ResolvedTarget, libc_path: std.Build.LazyPath) void {
+fn updateLibcInBuilder(b: *std.Build, target: std.Target, libc_path: std.Build.LazyPath) void {
     for (b.install_tls.step.dependencies.items) |dep_step| {
         const inst = dep_step.cast(std.Build.Step.InstallArtifact) orelse continue;
         const art = inst.artifact;
         if (art.libc_file != null) return; // already handled
-        if (art.root_module.resolved_target) |other_target| {
-            if (target.result.os.tag == other_target.result.os.tag and target.result.abi == other_target.result.abi) {
+        if (art.root_module.resolved_target == null)
+            std.log.warn("skipping artifact '{s}' with no resolved target", .{art.name});
+        if (art.root_module.resolved_target) |resolved_target| {
+            const art_target = resolved_target.result;
+            if (target.os.tag == art_target.os.tag and target.abi == art_target.abi) {
                 std.log.info("overriding lib '{s}' libc path to {s}", .{ art.name, libc_path.getDisplayName() });
                 art.setLibCFile(libc_path);
+            } else {
+                std.log.info("skipping lib '{s}' with target {s} (expected {s})", .{
+                    art.name,
+                    art_target.zigTriple(b.allocator) catch @panic("OOM"),
+                    target.zigTriple(b.allocator) catch @panic("OOM"),
+                });
             }
         }
     }
