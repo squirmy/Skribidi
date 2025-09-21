@@ -108,6 +108,7 @@ const skribidi_dependencies: []const []const u8 = &.{
 };
 
 const source_files: []const []const u8 = &.{
+    "skb_attributes.c",
     "skb_canvas.c",
     "skb_common.c",
     "skb_editor.c",
@@ -117,9 +118,11 @@ const source_files: []const []const u8 = &.{
     "skb_layout.c",
     "skb_layout_cache.c",
     "skb_rasterizer.c",
+    "skb_text.c",
 };
 
 const header_files: []const []const u8 = &.{
+    "skb_attributes.h",
     "skb_canvas.h",
     "skb_common.h",
     "skb_editor.h",
@@ -129,9 +132,11 @@ const header_files: []const []const u8 = &.{
     "skb_layout.h",
     "skb_layout_cache.h",
     "skb_rasterizer.h",
+    "skb_text.h",
 };
 
 const test_files: []const []const u8 = &.{
+    "test_attributed_text.c",
     "test_basic.c",
     "test_canvas.c",
     "test_cpp.cpp",
@@ -139,24 +144,30 @@ const test_files: []const []const u8 = &.{
     "test_font_collection.c",
     "test_hashtable.c",
     "test_icon_collection.c",
+    "test_image_atlas.c",
     "test_layout.c",
     "test_layout_cache.c",
     "test_rasterizer.c",
-    "test_image_atlas.c",
     "test_tempalloc.c",
     "tester.c",
 };
 
 const example_files: []const []const u8 = &.{
-    "debug_draw.c",
+    "debug_render.c",
+    "example_aligns.c",
+    "example_baseattribs.c",
     "example_cached.c",
+    "example_culling.c",
     "example_decorations.c",
     "example_fallback.c",
+    "example_hyperlink.c",
     "example_icons.c",
+    "example_inlineobj.c",
     "example_richtext.c",
     "example_testbed.c",
     "ime.c",
     "main.c",
+    "render.c",
     "utils.c",
 };
 

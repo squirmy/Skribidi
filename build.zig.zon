@@ -21,8 +21,8 @@
             .hash = "budouxc-0.1.0-pOdI8HYRAADMdmiKFdHSLdT0VADRjwQW32IkKeHSndzX",
         },
         .Skribidi = .{
-            .url = "git+https://github.com/memononen/Skribidi#70024d42cfd56f17aaae05846bc6c21e32311cd5",
-            .hash = "N-V-__8AAGxWMgK-vwbXpl8K6s72sggXZmKPEjmoUziVpFyy",
+            .url = "git+https://github.com/memononen/Skribidi#ce75df9bc556591547710882363508e0d8fce62d",
+            .hash = "N-V-__8AAPLbNQIk4KFi4dyw4d0OFYmgxIZ-B63vMq1nIA0X",
         },
         .glfw = .{
             .url = "git+https://github.com/jjkh/glfw#40dc85b4bbe3075034a4d395185b289c687ca2ca",
