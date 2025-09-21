@@ -5,8 +5,8 @@
     .minimum_zig_version = "0.14.1",
     .dependencies = .{
         .harfbuzz = .{
-            .url = "git+https://github.com/jjkh/harfbuzz?ref=upstream-main#493044eb34c8306ad230fc0225bbe9a01e2c2b66",
-            .hash = "harfbuzz-11.3.3-dev-0spxYYIRAACn5XS2j5t5HNrXX2nSKs1-bNDpm77Dt9mr",
+            .url = "git+https://github.com/jjkh/harfbuzz?ref=upstream-main#845b27ef8cf3cfcbf6cfc8bec21e26c88e7783c1",
+            .hash = "harfbuzz-11.3.3-dev-0spxYbERAAAtbNjbag_-3Tf42LfAXTgXhcU0QECJPmtv",
         },
         .SheenBidi = .{
             .url = "git+https://github.com/jjkh/SheenBidi#2d409dc1b4a9b18ba4ae7a421181f4baee4724bc",
